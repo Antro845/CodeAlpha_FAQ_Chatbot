@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FAQ Chatbot</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<!-- Floating Chat Button -->
+<!-- Floating Chat Button -->
+<div id="chat-button">💬</div>
+
+<!-- Full Screen Chat Window -->
+<div id="chat-widget" class="hidden">
+    <div class="chat-header">
+        FAQ Chatbot
+        <button id="close-chat">×</button>
+    </div>
+
+    <div class="chat-body">
+        <div id="chat-box"></div>
+    </div>
+
+    <div class="chat-footer">
+        <input type="text" id="user-input" placeholder="Ask your question...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+
+<script>
+
+const chatBtn = document.getElementById("chat-button");
+const chatWidget = document.getElementById("chat-widget");
+const closeChat = document.getElementById("close-chat");
+
+chatBtn.addEventListener("click", () => {
+    chatWidget.classList.remove("hidden");
+    setTimeout(() => chatWidget.classList.add("visible"), 10);
+});
+
+closeChat.addEventListener("click", () => {
+    chatWidget.classList.remove("visible");
+    setTimeout(() => chatWidget.classList.add("hidden"), 350);
+});
+
+
+// -------- Format timestamp -------- //
+function getTime() {
+    const now = new Date();
+    let h = now.getHours();
+    let m = now.getMinutes().toString().padStart(2, "0");
+    let ampm = h >= 12 ? "PM" : "AM";
+    h = h % 12 || 12;
+    return `${h}:${m} ${ampm}`;
+}
+
+
+// -------- Add message to chat -------- //
+function addMessage(text, type) {
+    let chatBox = document.getElementById("chat-box");
+
+    let bubble = document.createElement("div");
+    bubble.className = type;
+
+    bubble.innerHTML = `
+        <div>${text}</div>
+        <div class="timestamp">${getTime()}</div>
+    `;
+
+    chatBox.appendChild(bubble);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+
+// -------- Add typing animation -------- //
+function showTyping() {
+    let chatBox = document.getElementById("chat-box");
+
+    let typingDiv = document.createElement("div");
+    typingDiv.id = "typing-indicator";
+    typingDiv.className = "typing";
+
+    typingDiv.innerHTML = `
+        <div class="typing-dots">
+            <span></span><span></span><span></span>
+        </div>
+    `;
+
+    chatBox.appendChild(typingDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function removeTyping() {
+    let t = document.getElementById("typing-indicator");
+    if (t) t.remove();
+}
+
+
+// -------- SEND MESSAGE LOGIC -------- //
+function sendMessage() {
+    let input = document.getElementById("user-input");
+    let userText = input.value.trim();
+
+    if (userText === "") return;
+
+    addMessage("You: " + userText, "user");
+    input.value = "";
+
+    showTyping();
+
+    // Simulate bot delay
+    fetch("/get_response", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "message=" + encodeURIComponent(userText)
+    })
+    .then(res => res.json())
+    .then(data => {
+        removeTyping();
+        addMessage("Bot: " + data.reply, "bot");
+    });
+}
+
+
+// -------- ENTER KEY SEND -------- //
+document.getElementById("user-input").addEventListener("keypress", (e) => {
+    if (e.key === "Enter") sendMessage();
+});
+
+</script>
+
+</body>
+</html>

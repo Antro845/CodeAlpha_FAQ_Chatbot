@@ -1,0 +1,207 @@
+:root {
+    --royal: #6A0DAA;
+    --lavender: #BFA5E8;
+    --dark-bg: #0F0812;
+    --panel: #1B1224;
+    --text: #F3EFFA;
+}
+
+/* ---------------------- FLOATING BUTTON CENTER ---------------------- */
+#chat-button {
+    position: fixed;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+    width: 75px;
+    height: 75px;
+    background: var(--royal);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    font-size: 33px;
+    box-shadow: 0 0 30px rgba(106, 13, 170, 0.6);
+    transition: 0.25s ease;
+    z-index: 9999;
+}
+
+#chat-button:hover {
+    transform: translate(50%, -50%) scale(1.1);
+    box-shadow: 0 0 45px rgba(191, 165, 232, 0.9);
+}
+
+/* ---------------------- FULL SCREEN CHAT WINDOW ---------------------- */
+#chat-widget {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--dark-bg);
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.35s ease;
+    z-index: 99999;
+}
+
+/* FULL SCREEN ACTIVE STATE */
+#chat-widget.visible {
+    transform: scale(1);
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Header */
+.chat-header {
+    background: linear-gradient(135deg, var(--royal), var(--lavender));
+    padding: 18px;
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Close button */
+.chat-header button {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 32px;
+    cursor: pointer;
+}
+
+/* Chat body */
+.chat-body {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* =========================
+   CHAT BUBBLE NEW DESIGN
+========================= */
+
+/* USER (Right bubble - Violet) */
+.user {
+    background: linear-gradient(135deg, #7a1edb, #ba8fff);
+    color: white;
+    padding: 12px 14px;
+    margin: 10px 0;
+    border-radius: 18px 18px 4px 18px; /* iMessage style */
+    max-width: 70%;
+    width: fit-content;
+    display: block;
+    margin-left: auto;
+    clear: both;
+    font-size: 16px;
+    line-height: 1.45;
+    word-wrap: break-word;
+    position: relative;
+}
+
+/* BOT (Left bubble - WhatsApp style) */
+.bot {
+    background: rgba(255,255,255,0.12);
+    color: #f1e7ff;
+    padding: 12px 14px;
+    margin: 10px 0;
+    border-radius: 18px 18px 18px 4px;
+    max-width: 70%;
+    width: fit-content;
+    display: block;
+    margin-right: auto;
+    clear: both;
+    font-size: 16px;
+    line-height: 1.45;
+    word-wrap: break-word;
+    position: relative;
+}
+
+/* Timestamp inside bubbles */
+.timestamp {
+    font-size: 11px;
+    color: #d4cceb;
+    margin-top: 4px;
+    text-align: right;
+    opacity: 0.8;
+}
+
+/* ------------------ TYPING INDICATOR ------------------ */
+.typing {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.12);
+    padding: 10px 14px;
+    border-radius: 18px 18px 18px 4px;
+    width: fit-content;
+    margin: 10px 0;
+    margin-right: auto;
+    animation: fadeIn 0.3s ease;
+}
+
+.typing-dots {
+    display: flex;
+    gap: 4px;
+}
+
+.typing-dots span {
+    width: 6px;
+    height: 6px;
+    background: #d6c7ff;
+    border-radius: 50%;
+    animation: blink 1s infinite ease-in-out;
+}
+
+.typing-dots span:nth-child(2){ animation-delay: .2s; }
+.typing-dots span:nth-child(3){ animation-delay: .4s; }
+
+@keyframes blink {
+    0%, 80%, 100% { opacity: .3; }
+    40% { opacity: 1; }
+}
+
+
+
+/* Footer */
+.chat-footer {
+    padding: 20px;
+    display: flex;
+    gap: 15px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.chat-footer input {
+    flex: 1;
+    padding: 14px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 12px;
+    border: 1px solid var(--lavender);
+    color: white;
+    font-size: 17px;
+}
+
+.chat-footer button {
+    padding: 14px 24px;
+    background: var(--royal);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 17px;
+    cursor: pointer;
+    box-shadow: 0 0 12px rgba(106, 13, 170, 0.6);
+    font-weight: 600;
+}
+
+.chat-footer button:hover {
+    box-shadow: 0 0 20px rgba(191, 165, 232, 0.9);
+    transform: scale(1.05);
+}
+
